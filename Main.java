@@ -1,41 +1,38 @@
-import net.webeggs.juzzle.vocabulary.LowercaseTrieVocabulary;
-
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Scanner;
 
 /**
- * The main class
- *
- * @author Dilshat Salikhov
- * @version 1.0
- * @name Main
+ * Created by 1 on 22.03.2017.
  */
 public class Main {
     public static void main(String[] args) throws IOException {
-        BitSet set = new BitSet(100000);
-        LowercaseTrieVocabulary trie = new LowercaseTrieVocabulary();
-        Scanner scanner = new Scanner(new File("input.txt"));
-        FileWriter writer = new FileWriter(new File("output.txt"));
-        String[] insertedNum = scanner.nextLine().split(" ");
+        Scanner in = new Scanner(new File("input.txt"));
+        FileWriter out = new FileWriter(new File("output.txt"));
+        long seed = in.nextLong();
+        MyRandom myRandom = new MyRandom(seed);
+        AVLTree<Double, Integer> avlTree = new AVLTree<>();
+        double next;
+        int counter;
+        counter = 0;
+        int result;
+        while (true) {
 
-        for (int i = 0; i < insertedNum.length; i++) {
-            if (!insertedNum[i].isEmpty()) {
-                set.setBit(Integer.parseInt(insertedNum[i]));
+            next = myRandom.nextDouble();
+            counter++;
+            if (!avlTree.contain(next)) {
+                avlTree.put(next, counter);
+            } else if (avlTree.contain(next)) {
+                result = counter - avlTree.get(next);
+                break;
             }
 
 
         }
-        String[] testedNum = scanner.nextLine().split(" ");
-        for (int i = 0; i < testedNum.length; i++) {
-            if (!testedNum[i].isEmpty()) {
-                writer.write(set.hasElement(Integer.parseInt(testedNum[i])) + " ");
-            }
-        }
-        writer.close();
 
+        out.write(Integer.toString(result));
+        out.close();
 
     }
-
 }
